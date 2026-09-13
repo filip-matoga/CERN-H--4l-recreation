@@ -15,11 +15,11 @@ dummyfile2 = uproot.open("root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISum
 inspection1 = dummyfile1["Events;1"]
 # print(inspection2.keys())
 
-muoninspect = inspection1.arrays(["Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass"], entry_stop = 10000, library = "ak")
+muoninspect = inspection1.arrays(["Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge"], entry_stop = 10000, library = "ak")
 mask = (abs(muoninspect["Muon_eta"]) < 2.4) & (muoninspect["Muon_pt"] > 5)
 fmask1 = muoninspect[mask]
 
-filtered1 = fmask1[ak.num(fmask1["Muon_pt"]) == 4]
+filtered1 = fmask1[(ak.num(fmask1["Muon_pt"]) == 4) & (ak.sum(fmask1["Muon_charge"], axis=1) == 0)]
 print(filtered1)
 
 muons_p1 = vector.zip({
@@ -37,12 +37,12 @@ fig, ax = plt.subplots()
 
 inspection2 = dummyfile2["Events;1"]
 
-muoninspect2 = inspection2.arrays(["Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass"], entry_stop = 10000, library = "ak")
+muoninspect2 = inspection2.arrays(["Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge"], entry_stop = 10000, library = "ak")
 
 mask2 = (abs(muoninspect2["Muon_eta"]) < 2.4) & (muoninspect2["Muon_pt"] > 5)
 fmask2 = muoninspect2[mask2]
 
-filtered2 = fmask2[ak.num(fmask2["Muon_pt"]) == 4]
+filtered2 = fmask2[(ak.num(fmask2["Muon_pt"]) == 4) & (ak.sum(fmask2["Muon_charge"], axis=1) == 0)]
 
 muons_p2 = vector.zip({
     "pt": filtered2["Muon_pt"],
@@ -59,3 +59,17 @@ ax.set_xlabel("Mass [GeV]")
 ax.legend()
 
 plt.show()
+
+
+
+# Tasks
+# 2e2m filter
+# Add statistics to correct histogram
+# delta R = sqrt((eta1-eta2)^2 + (phi1-phi2)^2)
+# In the dense environment of a heavy-ion collision, overlapping tracks and high particle multiplicities can make accurate tracking difficult, 
+# necessitating sophisticated algorithms and detector technologies. High tracking efficiency ensures
+#  that the measured particle yields and spectra accurately reflect the true particle production in the collision.
+# source: cern open data atlas documentation
+# 33.40±0.30 fb-1
+# 10 fb^-1
+
