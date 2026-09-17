@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import mplhep as hep
 import vector
-
+import mplhep as hep
 
 
 
@@ -15,7 +15,7 @@ dummyfile2 = uproot.open("root://eospublic.cern.ch//eos/opendata/cms/mc/RunIISum
 inspection1 = dummyfile1["Events;1"]
 # print(inspection2.keys())
 
-muoninspect = inspection1.arrays(["Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge"], entry_stop = 10000, library = "ak")
+muoninspect = inspection1.arrays(["Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge"], entry_stop = 100000, library = "ak")
 mask = (abs(muoninspect["Muon_eta"]) < 2.4) & (muoninspect["Muon_pt"] > 5)
 fmask1 = muoninspect[mask]
 
@@ -37,7 +37,7 @@ fig, ax = plt.subplots()
 
 inspection2 = dummyfile2["Events;1"]
 
-muoninspect2 = inspection2.arrays(["Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge"], entry_stop = 10000, library = "ak")
+muoninspect2 = inspection2.arrays(["Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge"], entry_stop = 100000, library = "ak")
 
 mask2 = (abs(muoninspect2["Muon_eta"]) < 2.4) & (muoninspect2["Muon_pt"] > 5)
 fmask2 = muoninspect2[mask2]
@@ -62,10 +62,40 @@ plt.show()
 
 
 
+# finding Z peak by finding mass of lepton pairs
+# find oppositely charged leptons where mass adds up to roughly 80 GeV
+# select events, isolate the 2 pairs, create new branch with list of all of these selected to plot
+
+# pos_e = good_electrons["Electron_charge" == 1]
+# neg_e = good_electrons["Electron_charge" == -1]
+# pairs_e = ak.concatenate(pos_e,neg_e, axis = 1)
+
+# pos_m = good_muons["Electron_charge" == 1]
+# neg_m = good_muons["Electron_charge" == -1]
+# pairs_m = ak.concatenate(pos_m,neg_m, axis=1)
+
+# pos_m_pair = good_muonelectron_m["Electron_charge" == 1]
+# neg_m_pair = good_muonelectron_m["Electron_charge" == -1]
+# pairs_dual_m = ak.concatenate(pos_m_pair, neg_m_pair, axis=1)
+
+# pos_e_pair = good_muonelectron_e["Electron_charge" == 1]
+# neg_e_pair = good_muonelectron_e["Electron_charge" == -1]
+# pairs_dual_e = ak.concatenate(pos_e_pair,neg_e_pair, axis=1)
+
+
+
+
+# histograms are weighted for accurate representation
+
+
+
+
+
+
 # Tasks
 # 2e2m filter
 # Add statistics to correct histogram
-# delta R = sqrt((eta1-eta2)^2 + (phi1-phi2)^2)
+# delta R = sqrt((eta1-eta2)^2 + (phi1-phi2)^2) ?
 # In the dense environment of a heavy-ion collision, overlapping tracks and high particle multiplicities can make accurate tracking difficult, 
 # necessitating sophisticated algorithms and detector technologies. High tracking efficiency ensures
 #  that the measured particle yields and spectra accurately reflect the true particle production in the collision.
