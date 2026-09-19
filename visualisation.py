@@ -9,24 +9,31 @@ import zz_background
 
 # CMS style used for visualisation
 
-hep.style.use("CMS")
+# hep.style.use("CMS")
 
 fig, ax = plt.subplots()
 lum = 35900
 c1 = 0.012
-c2 = 0.0015
-
-w1 = (lum*c1*higgs_signal.lepton_weights)/ak.sum(higgs_signal.tree["Generator_weight"].array(library="ak"))
-w2 = (lum*c2*zz_background.lepton_weights)/ak.sum(zz_background.tree["Generator_weight"].array(library="ak"))
+c2 = 3.654e-3
 
 
+w1 = (lum*c1*higgs_signal.lepton_weights["Generator_weight"])/ak.sum(higgs_signal.gen_weight["Generator_weight"])
+w2 = (lum*c2*zz_background.lepton_weights["Generator_weight"])/ak.sum(zz_background.gen_weight["Generator_weight"])
+
+print(len(w1))
+print(len(higgs_signal.lepton_mass))
+
+print(len(w2))
+print(len(zz_background.lepton_mass))
 
 # histograms are weighted for accurate representation
+
+
 
 ax.hist([higgs_signal.lepton_mass, zz_background.lepton_mass],
          bins=50,range=(70,250), histtype="step", label=["Higgs Signal", "ZZ Background"],
            color=["blue","red"],
-           weights = [ak.full_like(higgs_signal.lepton_mass,w1),ak.full_like(zz_background.lepton_mass,w2)])
+           weights = [w1,w2])
 ax.set_xlabel("Mass [GeV]")
 
 
@@ -46,9 +53,3 @@ plt.show()
 
 # Weight = lum * cross section/MC GEN WEIGHTS
 # lum * cross section = prob
-
-# signal cross seciton 0.012 pb
-# background cross section 1.256 pb
-
-# tree["Generator_weight"].array(library="ak",entry_stop=10000)
-

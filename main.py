@@ -29,11 +29,20 @@ def kinematics(pT, eta, lepton):
 def selection():
     pass
 
-def leptoncreate():
+def leptoncreate(tree, lepton):
     pass
 
 def leptonmass():
     pass
 
-def good_lepton():
+def good_lepton(pT, charge, number, filtered_lepton, filter_mask):
+    return filtered_lepton[(ak.num(filter_mask["Muon_pt"]) == 4) & (ak.sum(filter_mask["Muon_charge"], axis=1) == 0)]
     pass
+
+def vector_computer(pT, eta, phi, mass, lepton, number):
+    zipped_lepton = vector.zip({
+        "pt": lepton[f"lepton.capitalise_pT"],
+        "eta": lepton[f"lepton.capitalise_pT"],
+        "phi": lepton[f"lepton.capitalise_pT"],
+        "mass": lepton[f"lepton.capitalise_pT"]})
+    return (zipped_lepton[:,0] + zipped_lepton[:,1] + zipped_lepton[:,2] + zipped_lepton[:,3]).mass

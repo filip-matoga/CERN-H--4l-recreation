@@ -13,6 +13,7 @@ electrons = tree.arrays(["Electron_pt", "Electron_eta", "Electron_phi", "Electro
 muons = tree.arrays(["Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge"], library = "ak")
 muonelectron = tree.arrays(["Muon_pt", "Muon_eta", "Muon_phi", "Muon_mass", "Muon_charge",
                              "Electron_pt", "Electron_eta", "Electron_phi", "Electron_mass", "Electron_charge"], library = "ak")
+gen_weight = tree.arrays(["Generator_weight"], library = "ak")
 
 # defining kinematic cuts for selected leptons
 
@@ -68,6 +69,16 @@ electrons_mass = sum_electrons.mass
 muons_mass = sum_muons.mass
 muon_electron_mass = muon_electron_sum.mass
 
-lepton_mass = ak.concatenate([muons_mass, electrons_mass, muon_electron_mass], axis=0)
+lepton_mass = ak.concatenate([electrons_mass, muons_mass, muon_electron_mass], axis=0)
 
 # lepton weights
+
+electron_weights = gen_weight[(ak.num(filtered_electrons["Electron_pt"]) == 4) & (ak.sum(filtered_electrons["Electron_charge"], axis=1) == 0)]
+
+muon_weights = gen_weight[(ak.num(filtered_muons["Muon_pt"]) == 4) & (ak.sum(filtered_muons["Muon_charge"], axis=1) == 0)]
+
+muonelectron_weights = gen_weight[(ak.num(filtered_muonelectron_e["Electron_pt"]) == 2) & (ak.sum(filtered_muonelectron_e["Electron_charge"], axis=1) == 0)
+                                  & (ak.num(filtered_muonelectron_m["Muon_pt"]) == 2) & (ak.sum(filtered_muonelectron_m["Muon_charge"], axis=1) == 0)]
+
+lepton_weights = ak.concatenate([electron_weights,muon_weights,muonelectron_weights],axis=0)
+print(lepton_weights["Generator_weight"])
