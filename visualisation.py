@@ -21,21 +21,20 @@ w1 = (lum*c1*higgs_signal.lepton_weights["Generator_weight"])/ak.sum(higgs_signa
 w2 = (lum*c2*zz_background.lepton_weights["Generator_weight"])/ak.sum(zz_background.gen_weight["Generator_weight"])
 
 print(len(w1))
-print(len(higgs_signal.lepton_mass))
 
 print(len(w2))
-print(len(zz_background.lepton_mass))
 
 # histograms are weighted for accurate representation
 
 
 
 ax.hist([higgs_signal.lepton_mass, zz_background.lepton_mass],
-         bins=50,range=(70,250), histtype="step", label=["Higgs Signal", "ZZ Background"],
+         bins=100,range=(70,250), histtype="step", label=["Higgs Signal", "ZZ Background"],
            color=["blue","red"],
            weights = [w1,w2])
-ax.set_xlabel("Mass [GeV]")
 
+ax.set_xlabel("Mass [GeV]")
+# 26.5 upscaling factor to zz bg
 
 # bin_edges = np.linspace(70, 250, 50)
 

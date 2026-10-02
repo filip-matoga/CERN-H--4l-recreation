@@ -86,4 +86,5 @@ muonelectron_weights = gen_weight[(ak.num(filtered_muonelectron_e["Electron_pt"]
 
 lepton_weights = ak.concatenate([electron_weights,muon_weights,muonelectron_weights],axis=0)
 # print(lepton_weights)
-print(lepton_weights["Generator_weight"])
+
+# 5604
